@@ -1,7 +1,8 @@
 """Module containing various string processing functions used for grounding."""
-import regex as re
-from .greek_alphabet import greek_alphabet, greek_to_latin
 
+import regex as re
+
+from .greek_alphabet import greek_alphabet, greek_to_latin
 
 # We try to list all kinds of dashes here
 dashes = [chr(0x2212), chr(0x002d)] + [chr(c) for c in range(0x2010, 0x2016)]
@@ -44,6 +45,9 @@ def remove_dashes(s):
     return replace_dashes(s, '')
 
 
+REPLACE_WHITESPACE_RE = re.compile(r'\s+')
+
+
 def replace_whitespace(s, rep=' '):
     """Replace any length white spaces in the given string with a replacement.
 
@@ -60,7 +64,7 @@ def replace_whitespace(s, rep=' '):
     str
         The string in which whitespaces have been replaced.
     """
-    s = re.sub(r'\s+', rep, s)
+    s = REPLACE_WHITESPACE_RE.sub(rep, s)
     return s
 
 
@@ -83,6 +87,9 @@ def normalize(s):
     return s
 
 
+SPLIT_PRESERVE_TOKES_RE = re.compile(r'(\W)')
+
+
 def split_preserve_tokens(s):
     """Return split words of a string including the non-word tokens.
 
@@ -97,7 +104,7 @@ def split_preserve_tokens(s):
         The list of words in the string including the separator tokens,
         typically spaces and dashes..
     """
-    return re.split(r'(\W)', s)
+    return SPLIT_PRESERVE_TOKES_RE.split(s)
 
 
 def replace_greek_uni(s):
@@ -112,6 +119,13 @@ def replace_greek_latin(s):
     for greek_spelled_out, latin in greek_to_latin.items():
         s = s.replace(greek_spelled_out, latin)
     return s
+
+
+SENTENCE_INITIAL_CAP_RE = re.compile(r'^\p{Lu}\p{Ll}*$')
+SINGLE_CAP_RE = re.compile(r'^\p{Lu}$')
+ALL_CAPS_RE = re.compile(r'^\p{Lu}+$')
+ALL_LOWER_RE = re.compile(r'^\p{Ll}+$')
+INITIAL_CAP_RE = re.compile(r'^\p{Lu}\p{Ll}+$')
 
 
 def get_capitalization_pattern(word, beginning_of_sentence=False):
@@ -132,18 +146,21 @@ def get_capitalization_pattern(word, beginning_of_sentence=False):
         initial_cap, mixed.
 
     """
-    if beginning_of_sentence and re.match(r'^\p{Lu}\p{Ll}*$', word):
+    if beginning_of_sentence and SENTENCE_INITIAL_CAP_RE.match(word):
         return 'sentence_initial_cap'
-    elif re.match(r'^\p{Lu}$', word):
+    elif SINGLE_CAP_RE.match(word):
         return 'single_cap_letter'
-    elif re.match(r'^\p{Lu}+$', word):
+    elif ALL_CAPS_RE.match(word):
         return 'all_caps'
-    elif re.match(r'^\p{Ll}+$', word):
+    elif ALL_LOWER_RE.match(word):
         return 'all_lower'
-    elif re.match(r'^\p{Lu}\p{Ll}+$', word):
+    elif INITIAL_CAP_RE.match(word):
         return 'initial_cap'
     else:
         return 'mixed'
+
+
+PLURAL_CAPS_RE = re.compile(r'^\p{Lu}+$')
 
 
 def depluralize(word):
@@ -187,7 +204,7 @@ def depluralize(word):
     # If the word is all caps and the last letter is an s, then it's a very
     # strong signal that it is pluralized so we have a custom return value
     # for that
-    elif re.match(r'^\p{Lu}+$', word[:-1]):
+    elif PLURAL_CAPS_RE.match(word[:-1]):
         return word[:-1], 'plural_caps_s'
     # Otherwise, we just go with the assumption that the last s is the
     # plural marker
