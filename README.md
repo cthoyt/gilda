@@ -27,6 +27,12 @@ There is a public REST service running on AWS but the service can also be run lo
 python -m gilda.app
 ```
 
+Gilda's optional `[web]` requirements need to be installed to use this command with:
+
+```bash
+pip install git+https://github.com/indralab/gilda.git
+```
+
 Below is an example request using `curl`:
 
 ```bash
