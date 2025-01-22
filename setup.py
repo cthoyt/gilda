@@ -35,14 +35,34 @@ setup(name='gilda',
           'Programming Language :: Python :: 3.11',
       ],
       packages=find_packages(),
-      install_requires=['regex', 'boto3', 'adeft', 'flask>=3.0,<4.0',
-                        'flask-restx>=1.3.0', 'pystow>=0.1.10', 'unidecode',
-                        'importlib_metadata; python_version < "3.8"',
-                        'werkzeug', 'scikit-learn<1.5'],
+      install_requires=[
+        'regex',
+        'importlib_metadata; python_version < "3.8"',
+        'unidecode',
+      ],
       extras_require={'test': ['pytest', 'pytest-cov', 'pandas'],
                       'terms': ['indra', 'obonet'],
                       'benchmarks': ['pandas>=1.0', 'requests',
                                      'tabulate', 'tqdm', 'click'],
+                      # Use this if you want gilda to be able
+                      # to automatically download pre-built indexes
+                      # and disambiguation models
+                      "resources": [
+                        'boto3',
+                        'pystow>=0.1.10',
+                      ],
+                      "web": [
+                        'flask>=3.0,<4.0',
+                        'flask-restx>=1.3.0',
+                        'werkzeug',
+                      ],
+                      "disambiguation": [
+                        'adeft',
+                        'scikit-learn<1.5'
+                      ],
+                      "ner": [
+                        "nltk",
+                      ],
                       'ui': [
                         'flask-wtf',
                         'flask-bootstrap',
