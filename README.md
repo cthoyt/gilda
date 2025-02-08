@@ -1,4 +1,16 @@
-# Gilda: Grounding Integrating Learned Disambiguation
+# Gilda-Slim
+
+> [!IMPORTANT]  
+> This is a fork of https://github.com/gyorilab/gilda that removes several requirements
+> that aren't part of its core functionality for NER (e.g., web requirements) and makes
+> the disambiguation from Adeft optional as well, since it has requirement constraints
+> that are difficult to satisfy in combination with other packages that use more modern
+> versions of numpy and scipy.
+>
+> This fork is redistributed under the same BSD 2-Clause
+> license. All changes were made on https://github.com/cthoyt/gilda/tree/slim and can be
+> compared using https://github.com/gyorilab/gilda/compare/master...cthoyt:gilda:slim.
+
 [![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause)
 [![Build](https://github.com/indralab/gilda/actions/workflows/tests.yml/badge.svg)](https://github.com/indralab/gilda/actions)
 [![Documentation](https://readthedocs.org/projects/gilda/badge/?version=latest)](https://gilda.readthedocs.io/en/latest/?badge=latest)

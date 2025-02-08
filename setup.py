@@ -18,7 +18,7 @@ with open(path.join(here, 'gilda', '__init__.py'), 'r') as fh:
         raise ValueError('Could not get version from gilda/__init__.py')
 
 
-setup(name='gilda',
+setup(name='gilda-slim',
       version=gilda_version,
       description=('Grounding for biomedical entities with contextual '
                    'disambiguation'),
