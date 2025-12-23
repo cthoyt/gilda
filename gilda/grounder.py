@@ -12,15 +12,11 @@ from textwrap import dedent
 from typing import Iterator, List, Mapping, Optional, Set, Tuple, Union, Iterable
 from urllib.request import urlretrieve
 
-from adeft.disambiguate import load_disambiguator
-from adeft.modeling.classify import load_model_info
-from adeft import available_shortforms as available_adeft_models
 from .term import Term, get_curie, get_bioregistry_url
 from .process import normalize, replace_dashes, replace_greek_uni, \
     replace_greek_latin, replace_greek_spelled_out, depluralize, \
     replace_roman_arabic
 from .scorer import Match, generate_match, score
-from .resources import get_gilda_models, get_grounding_terms
 
 __all__ = [
     "Grounder",
@@ -82,6 +78,8 @@ class Grounder(object):
         namespace_priority: Optional[List[str]] = None,
     ):
         if terms is None:
+            from .resources import get_grounding_terms
+
             terms = get_grounding_terms()
 
         if isinstance(terms, str) and terms.startswith("http"):
@@ -350,6 +348,8 @@ class Grounder(object):
         # We find the disambiguator for the given string and pass in
         # context
         if self.adeft_disambiguators[raw_str] is None:
+            from adeft.disambiguate import load_disambiguator
+
             self.adeft_disambiguators[raw_str] = load_disambiguator(raw_str)
         res = self.adeft_disambiguators[raw_str].disambiguate([context])
         # The actual grounding dict is at this index in the result
@@ -761,6 +761,11 @@ def filter_for_organism(terms, organisms):
 
 
 def find_adeft_models():
+    try:
+        from adeft import available_shortforms as available_adeft_models
+    except ImportError:
+        return {}
+
     adeft_disambiguators = {}
     for shortform in available_adeft_models:
         adeft_disambiguators[shortform] = None
@@ -768,11 +773,23 @@ def find_adeft_models():
 
 
 def load_adeft_models():
+    try:
+        from adeft.disambiguate import load_disambiguator
+    except ImportError:
+        return {}
+
     return {shortform: load_disambiguator(shortform)
             for shortform in find_adeft_models()}
 
 
 def load_gilda_models(cutoff=0.7):
+    try:
+        from adeft.modeling.classify import load_model_info
+    except ImportError:
+        return {}
+
+    from .resources import get_gilda_models
+
     with gzip.open(get_gilda_models(), 'rt') as fh:
         models = {k: load_model_info(v)
                   for k, v in json.loads(fh.read()).items()
