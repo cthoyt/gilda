@@ -105,8 +105,7 @@ class Grounder(object):
             raise TypeError('terms is neither a path nor a list of terms,'
                             'nor a normalized entry name to term dictionary')
 
-        self.prefix_index = {}
-        self._build_prefix_index()
+        self._prefix_index = {}
 
         self.adeft_disambiguators = find_adeft_models()
         self.gilda_disambiguators = None
@@ -117,6 +116,12 @@ class Grounder(object):
             namespace_priority
         )
 
+    @property
+    def prefix_index(self):
+        if not self._prefix_index:
+            self._build_prefix_index()
+        return self._prefix_index
+
     def _build_prefix_index(self):
         prefix_index = defaultdict(set)
         for norm_term in self.entries:
@@ -126,7 +131,7 @@ class Grounder(object):
             if not parts:
                 continue
             prefix_index[parts[0]].add(len(parts))
-        self.prefix_index = dict(prefix_index)
+        self._prefix_index = dict(prefix_index)
 
     def lookup(self, raw_str: str) -> List[Term]:
         """Return matching Terms for a given raw string.
