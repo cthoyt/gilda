@@ -7,7 +7,6 @@ import sys
 import logging
 import sqlite3
 from gilda.term import Term
-from . import resource_dir
 
 logger = logging.getLogger('gilda.resources.sqlite_adapter')
 
@@ -75,7 +74,11 @@ def build(grounding_entries, path=None):
         If not given, the .db file is generated in Gilda's default resources
         folder.
     """
-    path = path if path else os.path.join(resource_dir, 'grounding_terms.db')
+    if path is None:
+        from . import resource_dir
+
+        path = resource_dir.joinpath('grounding_terms.db')
+
     logger.info('Starting SQLite database at %s' % path)
     conn = sqlite3.connect(path)
     cur = conn.cursor()
