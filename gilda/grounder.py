@@ -552,7 +552,7 @@ class Grounder(object):
         Term Namespaces: {namespaces}
         Term Statuses: {status_counter}
         Adeft Disambiguators: {len(self.adeft_disambiguators):,}
-        Gilda Disambiguators: {len(self.gilda_disambiguators):,}
+        Gilda Disambiguators: {len(self.gilda_disambiguators or []):,}
         """)
 
     def print_summary(self, **kwargs) -> None:
