@@ -55,7 +55,7 @@ class Term(object):
         if not text:
             raise ValueError('Text for Term cannot be empty')
         if not norm_text.strip():
-            raise ValueError('Normalized text for Term cannot be empty')
+            raise ValueError(f'Normalized text for Term cannot be empty. Text: {text}')
         self.norm_text = norm_text
         self.text = text
         self.db = db
