@@ -1,8 +1,6 @@
 import os
-import boto3
 import pystow
 import logging
-import botocore
 from gilda import __version__
 
 logger = logging.getLogger(__name__)
@@ -60,6 +58,9 @@ mesh_to_taxonomy = {v: k for k, v in taxonomy_to_mesh.items()}
 
 
 def _download_from_s3(path, base_name):
+    import boto3
+    import botocore
+
     config = botocore.client.Config(signature_version=botocore.UNSIGNED)
     s3 = boto3.client('s3', config=config)
     tc = boto3.s3.transfer.TransferConfig(use_threads=False)
