@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "gilda"
+name = "gilda-slim"
 dynamic = ["version"]
 description = "Grounding for biomedical entities with contextual disambiguation"
 readme = {file = "README.md", content-type = "text/markdown"}
