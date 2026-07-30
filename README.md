@@ -10,9 +10,13 @@
 > This fork is redistributed under the same BSD 2-Clause
 > license. All changes were made on https://github.com/cthoyt/gilda/tree/slim and can be
 > compared using https://github.com/gyorilab/gilda/compare/master...cthoyt:gilda:slim.
-> 
-> Publish to https://pypi.org/project/gilda-slim with `uv build` and
-> `uvx twine upload dist/*`.
+>
+> Publish to https://pypi.org/project/gilda-slim with:
+>
+> ```console
+> $ uv build
+> $ uv publish --username __token__ --keyring-provider subprocess --publish-url https://upload.pypi.org/legacy/
+> ```
 
 [![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause)
 [![Build](https://github.com/gyorilab/gilda/actions/workflows/tests.yml/badge.svg)](https://github.com/gyorilab/gilda/actions)
